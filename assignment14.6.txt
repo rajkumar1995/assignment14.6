@@ -1,0 +1,80 @@
+1. Explain what is Thrift.
+1 Apache Thrift is a software framework for implementing Remote Procedure Call (RPC) in services, with cross-language support.
+2 Remote Procedure Call is a protocol that one program can use to request a service from a program located in another computer in a network, without having to understand network details.
+3 RPC is very similar to normal function but it is present remotely on a different server as a service and the service provides many such functions to its client.
+4 The client requires a way to know the exposed functions by this service and their parameters.
+This is where Apache Thrift comes in. It has its own “Interface Definition Language” (IDL).
+5 In this language you define the functions and their parameters.
+6 And then, use Thrift compiler to generate corresponding code for any language of your choice.
+7 What this means is that you can implement a function in Java, host it on a server and then remotely call it from Python or any other language for that matter.
+
+2. Explain what is REST.
+
+representational State Transfer (REST), is based on existing web based technologies.
+1 The actual transport is typically HTTP—which is the standard protocol for web applications.
+2 This makes REST ideal for communicating between heterogeneous systems: the protocol layer takes care of transporting the data in an interoperable format.
+3 Internally, all these servers (REST, Thrift and Avro) use the common HTable-based client API to access the tables.
+4 They are started on top of the region server processes, sharing the same physical machine.
+There is no one true recommendation for how to place the gateway servers.
+5 You may want to collocate them, or have them on dedicated machines
+
+3. What is bulk import in Hbase?
+some of the bulk import techniques in Hbase are:
+
+TableMapReduceUtil
+1 Utility for TableMapper and TableReducer
+addDependencyJars(org.apache.hadoop.mapreduce.Job job)
+2 Add the HBase dependency jars as well as jars for any of the configured job classes to the job configuration, so that JobClient will ship them to the cluster and add them to the DistributedCache.
+
+initTableReducerJob(String table, Class<? extends TableReducer> reducer,
+org.apache.hadoop.mapreduce.Job job)
+3 Use this before submitting a TableReduce job.
+4 sets TableOutputFormat as the output format
+
+TableOutputFormat
+1 Convert Map/Reduce output and write it to an HBase table.
+2 Output value must be either a Put or a Delete instance
+
+HFileOutputFormat
+1 Writes HFiles. Passed KeyValues must arrive in order. Currently, can only write files to a
+single column family at a time.
+
+PutSortReducer
+1 Emits sorted Puts. Reads in all Puts from passed Iterator, sorts them, then emits Puts in
+sorted order. If lots of columns per row, it will use lots of memory sorting.
+
+4. What is meant by a work flow and what is an oozie workflow.
+1.A workflow consists of an orchestrated and repeatable pattern of business activity enabled by the systematic organization of resources into processes that transform materials, provide services, or process information. 
+It can be depicted as a sequence of operations, declared as work of a person or group, or one or more simple or complex mechanisms.
+
+2. Apache Oozie is a real time scheduler and workflow engine that blends well with large
+production environments
+3. It is a server based workflow engine
+4. Oozie can run workflow jobs with MapReduce and Pig action nodes
+• Oozie Workflow jobs are Directed Acyclical Graphs (DAGs) of actions.• To run oozie workflows, two files are needed.
+1. workflow.xml (stored in HDFS)
+• It contains the structure of workflow.
+2. job.properties (stored in local)
+• It contains the configuration properties
+
+5. How can you track a Oozie job.
+Oozie job can be tracked using job tracker in job.properties
+
+6. What kind of jobs can be scheduled with Oozie.
+There are two basic types of Oozie jobs:
+Oozie Workflow jobs are Directed Acyclical Graphs (DAGs), specifying a sequence of actions to execute. The Workflow job has to wait.
+Oozie Coordinator jobs are recurrent Oozie Workflow jobs that are triggered by time and data availability.
+
+7. What is meant by oozie co-ordinator and how it is useful
+
+The Oozie Coordinator system allows the user to define and execute recurrent and interdependent workflow job
+
+Coordinator Action: A coordinator action is a workflow job that is started when a set of conditions are met.
+
+Coordinator Application: A coordinator application defines the conditions under which coordinator actions should be created and when the actions can be started. The coordinator application also defines a start and an end time. Normally, coordinator applications are parameterized. A Coordinator application is written in XML.
+
+Coordinator Job: A coordinator job is an executable instance of a coordination definition. A job submission is done by submitting a job configuration that resolves all parameters in the application definition.
+
+Coordinator Definition Language: The language used to describe datasets and coordinator applications.
+
+Coordinator Engine: A system that executes coordinator job
